@@ -10,36 +10,27 @@ const Navbar = ({ grouping: propGrouping, setGrouping, ordering: propOrdering, s
   const [grouping, setLocalGrouping] = useState(initialGrouping);
   const [ordering, setLocalOrdering] = useState(initialOrdering);
 
-//   useEffect(() => {
-//     if (propGrouping !== grouping) {
-//       setLocalGrouping(propGrouping);
-//     }
-//   }, [propGrouping, grouping]);
-
   useEffect(() => {
     localStorage.setItem("grouping", grouping);
     setGrouping(grouping);
-  }, [grouping]);
+  }, [grouping, setGrouping]);
 
   useEffect(() => {
     localStorage.setItem("ordering", ordering);
     setOrdering(ordering);
-  }, [ordering]);
+  }, [ordering, setOrdering]);
 
   // Handlers
-  const handleGrouping = (event) => {
-    const newValue = event.target.value;
-    localStorage.setItem("grouping", newValue);
-    setGrouping(newValue);
-    if (newValue === "users") {
+  const handleGroupingChange = (event) => {
+    const newGrouping = event.target.value;
+    setLocalGrouping(newGrouping);
+    if (newGrouping === "users") {
       call();
     }
   };
 
-  const handleOrdering = (event) => {
-    const newValue = event.target.value;
-    localStorage.setItem("ordering", newValue);
-    setOrdering(newValue);
+  const handleOrderingChange = (event) => {
+    setLocalOrdering(event.target.value);
   };
 
   useEffect(() => {
@@ -59,24 +50,24 @@ const Navbar = ({ grouping: propGrouping, setGrouping, ordering: propOrdering, s
   return (
     <div className="Navbar">
       <div className="dropdown-container" ref={dropdownRef}>
-        <button onClick={() => setIsOpen(!isOpen)} className="dropdown-btn">
+        <button onClick={() => setIsOpen((prev) => !prev)} className="dropdown-btn">
           <i className="bx bx-slider"></i>
-          <div className="btn-txt">Display</div>
+          <span className="btn-txt">Display Options</span>
           <i className="bx bx-chevron-down"></i>
         </button>
         {isOpen && (
           <div className="dropdown-content">
             <div className="Grouping">
-              <label>Grouping</label>
-              <select value={propGrouping} onChange={handleGrouping}>
+              <label htmlFor="grouping-select">Grouping</label>
+              <select id="grouping-select" value={grouping} onChange={handleGroupingChange}>
                 <option value="status">Status</option>
                 <option value="users">User</option>
                 <option value="priority">Priority</option>
               </select>
             </div>
             <div className="Ordering">
-              <label>Ordering</label>
-              <select value={propOrdering} onChange={handleOrdering}>
+              <label htmlFor="ordering-select">Ordering</label>
+              <select id="ordering-select" value={ordering} onChange={handleOrderingChange}>
                 <option value="priority">Priority</option>
                 <option value="title">Title</option>
               </select>

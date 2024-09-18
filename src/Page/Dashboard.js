@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Card from "../Components/Card";
 import Navbar from "../Components/Navbar";
-import CustomSpinner from "../Components/CustomSpinner";
+import CustomSpinner from "../Components/helper";
 
 // Import Images
 

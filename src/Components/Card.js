@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import profile from "../Assets/profile.png";
 import profile1 from "../Assets/profile1.png";
 import profile4 from "../Assets/profile4.jpeg";
@@ -15,89 +15,67 @@ const Card = ({
   status,
   priority,
   grouping,
-  ordering,
   statusMapping,
 }) => {
   const user = userData.find((user) => user.id === userId);
+
+  const renderStatusIcon = (status) => {
+    const icons = {
+      Todo: <i className="bx bx-circle" id="todo"></i>,
+      "In progress": <i className="bx bx-adjust" id="progress"></i>,
+      Backlog: <i className="bx bx-task-x" id="backlog"></i>,
+      Done: <i className="bx bxs-check-circle" id="done"></i>,
+    };
+    return icons[status] || <i className="bx bxs-x-circle" id="cancel"></i>;
+  };
+
+  const getUserAvatar = (userId) => {
+    const avatars = {
+      "usr-1": profile1,
+      "usr-2": profile6,
+      "usr-3": profile7,
+      "usr-4": profile5,
+      "usr-5": profile4,
+    };
+    return avatars[userId] || profile;
+  };
 
   return (
     <div className="card">
       <div className="card-header">
         <div className="status-heading">
-          {grouping == "users" || grouping == "priority" ? (
-            statusMapping[id] == "Todo" ? (
-              <i className="bx bx-circle" id="todo"></i>
-            ) : statusMapping[id] == "In progress" ? (
-              <i className="bx bx-adjust" id="progress"></i>
-            ) : statusMapping[id] == "Backlog" ? (
-              <i className="bx bx-task-x" id="backlog"></i>
-            ) : statusMapping[id] == "Done" ? (
-              <i className="bx bxs-check-circle" id="done"></i>
-            ) : (
-              <i className="bx bxs-x-circle" id="cancel"></i>
-            )
-          ) : null}
+          {(grouping === "users" || grouping === "priority") && renderStatusIcon(statusMapping[id])}
           <p>{id}</p>
         </div>
-        {grouping != "users" ? (
-          <div
-            className={
-              user && !user.available
-                ? "user-avatar-unavailable"
-                : "user-avatar"
-            }
-          >
+        {grouping !== "users" && (
+          <div className={user && !user.available ? "user-avatar-unavailable" : "user-avatar"}>
             <img
-              src={
-                userId == "usr-1"
-                  ? profile1
-                  : userId == "usr-2"
-                  ? profile6
-                  : userId == "usr-3"
-                  ? profile7
-                  : userId == "usr-4"
-                  ? profile5
-                  : userId == "usr-5"
-                  ? profile4
-                  : profile
-              }
-              className={
-                user && !user.available
-                  ? "user-avatar-unavailable"
-                  : "user-avatar"
-              }
+              src={getUserAvatar(userId)}
               alt="user"
-            ></img>
+              className={user && !user.available ? "user-avatar-unavailable" : "user-avatar"}
+            />
           </div>
-        ) : null}
+        )}
       </div>
       <div className="card-title">
         <p>{title}</p>
       </div>
       <div className="card-footer">
-        {grouping != "priority" ? (
+        {grouping !== "priority" && (
           <div className="feature-container">
-            {priority == "0" ? (
-              <i className="bx bx-dots-horizontal-rounded"></i>
-            ) : priority == "1" ? (
-              <i className="bx bx-signal-2"></i>
-            ) : priority == "2" ? (
-              <i className="bx bx-signal-3"></i>
-            ) : priority == "3" ? (
-              <i className="bx bx-signal-4"></i>
-            ) : (
-              <i className="bx bxs-message-square-error"></i>
-            )}
+            <i className={`bx ${priority === "0" ? "bx-dots-horizontal-rounded" : 
+                          priority === "1" ? "bx-signal-2" : 
+                          priority === "2" ? "bx-signal-3" : 
+                          priority === "3" ? "bx-signal-4" : 
+                          "bxs-message-square-error"}`}></i>
+          </div>   
+        )}
+        {tag?.map((value, index) => (
+          <div className="feature-container" key={index}>
+            <div className="alert-icon"></div>
+            <div className="feature-request">{value}</div>
           </div>
-        ) : null}
-        {tag?.map((value, index) => {
-          return (
-            <div className="feature-container" key={index}>
-              <div className="alert-icon"></div>
-              <div className="feature-request">{value}</div>
-            </div>
-          );
-        })}
+        ))}
       </div>
     </div>
   );
